@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
+import emailjs from '@emailjs/browser'
 import { Mail, MapPin, Send, Github, Linkedin, Youtube, Instagram } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -7,12 +8,18 @@ import { Label } from '@/components/ui/label'
 import { toast } from '@/hooks/use-toast'
 import { useRevealAnimation } from '@/hooks/useRevealAnimation'
 
+const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID
+const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID
+const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+
+const RATE_LIMIT_MS = 60_000 // 1 minuto entre envíos
+
 const contactInfo = [
   {
     icon: Mail,
     label: 'Email',
-    value: 'fmontero798@gmail.com',
-    href: 'mailto:fmontero798@gmail.com',
+    value: 'felixmont428@gmail.com',
+    href: 'mailto:felixmont428@gmail.com',
   },
   {
     icon: MapPin,
@@ -31,27 +38,68 @@ const socialLinks = [
 
 export function Contact() {
   const sectionRef = useRevealAnimation()
+  const formRef = useRef<HTMLFormElement>(null)
+  const lastSubmitTime = useRef<number>(0)
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     message: '',
   })
+
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    // Honeypot: si el campo oculto tiene contenido, es un bot
+    const honeypotValue = formRef.current?.querySelector<HTMLInputElement>('input[name="website"]')?.value
+    if (honeypotValue) {
+      toast({
+        title: '¡Mensaje enviado!',
+        description: 'Gracias por contactarme. Te responderé pronto.',
+      })
+      setFormData({ name: '', email: '', message: '' })
+      return
+    }
+
+    // Rate limiting: máximo 1 envío por minuto
+    const now = Date.now()
+    if (now - lastSubmitTime.current < RATE_LIMIT_MS) {
+      const secondsLeft = Math.ceil((RATE_LIMIT_MS - (now - lastSubmitTime.current)) / 1000)
+      toast({
+        title: 'Espera un momento',
+        description: `Podrás enviar otro mensaje en ${secondsLeft} segundos.`,
+      })
+      return
+    }
+
     setIsSubmitting(true)
 
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1500))
+    try {
+      await emailjs.sendForm(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        formRef.current!,
+        EMAILJS_PUBLIC_KEY,
+      )
 
-    toast({
-      title: '¡Mensaje enviado!',
-      description: 'Gracias por contactarme. Te responderé pronto.',
-    })
+      lastSubmitTime.current = Date.now()
 
-    setFormData({ name: '', email: '', message: '' })
-    setIsSubmitting(false)
+      toast({
+        title: '¡Mensaje enviado!',
+        description: 'Gracias por contactarme. Te responderé pronto.',
+      })
+
+      setFormData({ name: '', email: '', message: '' })
+    } catch {
+      toast({
+        title: 'Error al enviar',
+        description: 'Hubo un problema. Inténtalo de nuevo o escríbeme directamente a felixmont428@gmail.com.',
+      })
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const handleChange = (
@@ -145,9 +193,18 @@ export function Contact() {
             <div className="relative group">
               <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-2xl blur-lg group-hover:from-blue-500/15 group-hover:to-purple-500/15 transition-all duration-500" />
               <form
+                ref={formRef}
                 onSubmit={handleSubmit}
                 className="relative p-6 lg:p-8 rounded-2xl bg-card/60 backdrop-blur-xl border border-border/30 hover:border-border/50 transition-all duration-300"
               >
+                {/* Honeypot anti-spam: campo invisible que los bots rellenan */}
+                <input
+                  type="text"
+                  name="website"
+                  autoComplete="off"
+                  tabIndex={-1}
+                  style={{ position: 'absolute', left: '-9999px', opacity: 0, height: 0, width: 0 }}
+                />
                 <div className="grid sm:grid-cols-2 gap-4 mb-4">
                   <div className="space-y-2">
                     <Label htmlFor="name">Nombre</Label>
