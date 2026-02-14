@@ -21,7 +21,7 @@ const education = [
   {
     period: '2019 - 2021',
     title: 'Segundo de Bachillerato',
-    institution: 'Instituto de Educación Secundaria',
+    institution: 'San Pere',
     description: 'Modalidad de Ciencias y Tecnología.',
     icon: Award,
   },
@@ -186,12 +186,14 @@ export function CV() {
 
             {/* Download CV Button */}
             <div className="reveal opacity-0 translate-y-6 transition-all duration-700 stagger-5">
-              <Button
-                className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white hover:scale-[1.02] hover:shadow-glow transition-all duration-300"
-              >
-                <Award className="mr-2 w-4 h-4" />
-                Descargar CV
-              </Button>
+              <a href="/Curriculum.pdf" target="_blank" rel="noopener noreferrer" className="block">
+                <Button
+                  className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white hover:scale-[1.02] hover:shadow-glow transition-all duration-300"
+                >
+                  <Award className="mr-2 w-4 h-4" />
+                  Descargar CV
+                </Button>
+              </a>
             </div>
           </div>
         </div>
