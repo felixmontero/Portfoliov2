@@ -59,6 +59,7 @@ export function Footer() {
             size="icon"
             onClick={scrollToTop}
             className="rounded-full hover:bg-blue-500/20 hover:text-blue-400 hover:scale-110 hover:-translate-y-1 transition-all duration-300"
+            aria-label="Volver arriba"
           >
             <ArrowUp className="w-5 h-5" />
           </Button>

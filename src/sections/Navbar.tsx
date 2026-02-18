@@ -82,8 +82,8 @@ export function Navbar() {
                 key={link.href}
                 variant="ghost"
                 className={`transition-all duration-300 ${activeSection === link.href
-                    ? 'text-foreground bg-secondary/50'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-secondary/50'
+                  ? 'text-foreground bg-secondary/50'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-secondary/50'
                   }`}
                 onClick={() => scrollToSection(link.href)}
               >
@@ -111,6 +111,7 @@ export function Navbar() {
             size="icon"
             className="md:hidden"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label={isMobileMenuOpen ? 'Cerrar menú' : 'Abrir menú'}
           >
             {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </Button>
@@ -125,8 +126,8 @@ export function Navbar() {
                   key={link.href}
                   variant="ghost"
                   className={`justify-start ${activeSection === link.href
-                      ? 'text-foreground bg-secondary/50'
-                      : 'text-muted-foreground hover:text-foreground'
+                    ? 'text-foreground bg-secondary/50'
+                    : 'text-muted-foreground hover:text-foreground'
                     }`}
                   onClick={() => scrollToSection(link.href)}
                 >

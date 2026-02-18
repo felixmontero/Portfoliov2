@@ -198,13 +198,16 @@ export function Contact() {
                 className="relative p-6 lg:p-8 rounded-2xl bg-card/60 backdrop-blur-xl border border-border/30 hover:border-border/50 transition-all duration-300"
               >
                 {/* Honeypot anti-spam: campo invisible que los bots rellenan */}
-                <input
-                  type="text"
-                  name="website"
-                  autoComplete="off"
-                  tabIndex={-1}
-                  style={{ position: 'absolute', left: '-9999px', opacity: 0, height: 0, width: 0 }}
-                />
+                <div aria-hidden="true" style={{ position: 'absolute', left: '-9999px', opacity: 0, height: 0, width: 0 }}>
+                  <label htmlFor="website">No rellenar</label>
+                  <input
+                    type="text"
+                    id="website"
+                    name="website"
+                    autoComplete="off"
+                    tabIndex={-1}
+                  />
+                </div>
                 <div className="grid sm:grid-cols-2 gap-4 mb-4">
                   <div className="space-y-2">
                     <Label htmlFor="name">Nombre</Label>
