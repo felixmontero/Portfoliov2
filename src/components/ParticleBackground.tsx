@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { useTheme } from './ThemeProvider'
 
 interface Particle {
   x: number
@@ -14,6 +15,7 @@ export function ParticleBackground() {
   const particlesRef = useRef<Particle[]>([])
   const animationRef = useRef<number | null>(null)
   const mouseRef = useRef({ x: 0, y: 0 })
+  const { theme } = useTheme()
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -46,6 +48,11 @@ export function ParticleBackground() {
     }
     window.addEventListener('mousemove', handleMouseMove)
 
+    const isDark = theme === 'dark'
+    // Dark: blue particles | Light: softer blue-violet particles
+    const particleColor = isDark ? '59, 130, 246' : '99, 102, 241'
+    const opacityMultiplier = isDark ? 1 : 0.6
+
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
@@ -76,7 +83,7 @@ export function ParticleBackground() {
         // Draw particle
         ctx.beginPath()
         ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(59, 130, 246, ${particle.opacity})`
+        ctx.fillStyle = `rgba(${particleColor}, ${particle.opacity * opacityMultiplier})`
         ctx.fill()
 
         // Draw connections
@@ -89,7 +96,7 @@ export function ParticleBackground() {
             ctx.beginPath()
             ctx.moveTo(particle.x, particle.y)
             ctx.lineTo(other.x, other.y)
-            ctx.strokeStyle = `rgba(59, 130, 246, ${0.1 * (1 - dist / 100)})`
+            ctx.strokeStyle = `rgba(${particleColor}, ${0.1 * opacityMultiplier * (1 - dist / 100)})`
             ctx.lineWidth = 0.5
             ctx.stroke()
           }
@@ -108,7 +115,7 @@ export function ParticleBackground() {
         cancelAnimationFrame(animationRef.current)
       }
     }
-  }, [])
+  }, [theme])
 
   return (
     <canvas

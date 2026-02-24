@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Menu, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { ThemeToggle } from '@/components/ThemeToggle'
 
 const navLinks = [
   { href: '#about', label: 'Sobre mí' },
@@ -95,8 +96,9 @@ export function Navbar() {
             ))}
           </div>
 
-          {/* CTA Button */}
-          <div className="hidden md:block">
+          {/* CTA Button & Theme Toggle */}
+          <div className="hidden md:flex items-center gap-2">
+            <ThemeToggle />
             <Button
               className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white border-0 transition-all duration-300 hover:shadow-glow"
               onClick={() => scrollToSection('#contact')}
@@ -134,12 +136,15 @@ export function Navbar() {
                   {link.label}
                 </Button>
               ))}
-              <Button
-                className="mt-2 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white border-0"
-                onClick={() => scrollToSection('#contact')}
-              >
-                Hablemos
-              </Button>
+              <div className="flex items-center justify-between mt-2">
+                <ThemeToggle />
+                <Button
+                  className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white border-0"
+                  onClick={() => scrollToSection('#contact')}
+                >
+                  Hablemos
+                </Button>
+              </div>
             </div>
           </div>
         )}

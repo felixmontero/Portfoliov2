@@ -7,6 +7,15 @@
   <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
   <meta name="description" content="Portfolio de Félix Montero — desarrollador web en Mallorca. Proyectos, habilidades y contacto." />
   <title>Félix Montero - Portfolio</title>
+  <script>
+    // Prevent FOUC: apply theme class before first paint
+    (function() {
+      var theme = localStorage.getItem('theme');
+      if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />

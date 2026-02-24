@@ -8,6 +8,7 @@ import { Contact } from './sections/Contact'
 import { Footer } from './sections/Footer'
 import { ParticleBackground } from './components/ParticleBackground'
 import { Toaster } from './components/ui/Toaster'
+import { ThemeProvider } from './components/ThemeProvider'
 
 function App() {
   const [mounted, setMounted] = useState(false)
@@ -21,21 +22,23 @@ function App() {
   }
 
   return (
-    <div className="relative min-h-screen bg-background overflow-x-hidden">
-      <ParticleBackground />
-      <div className="relative z-10">
-        <Navbar />
-        <main>
-          <Hero />
-          <About />
-          <CV />
-          <Projects />
-          <Contact />
-        </main>
-        <Footer />
+    <ThemeProvider>
+      <div className="relative min-h-screen bg-background overflow-x-hidden">
+        <ParticleBackground />
+        <div className="relative z-10">
+          <Navbar />
+          <main>
+            <Hero />
+            <About />
+            <CV />
+            <Projects />
+            <Contact />
+          </main>
+          <Footer />
+        </div>
+        <Toaster />
       </div>
-      <Toaster />
-    </div>
+    </ThemeProvider>
   )
 }
 
